@@ -33,7 +33,7 @@ const Input = ({
   const { t } = useTranslation() as { t: (key: string) => string };
 
   return (
-    <div className="relative">
+    <div className='relative'>
       <input
         placeholder={placeholder}
         disabled={disabled}

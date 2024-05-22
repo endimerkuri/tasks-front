@@ -8,6 +8,13 @@ const AuthService = {
       authentication: {
         accessToken: string;
       };
+      user: {
+        firstName: string;
+        lastName: string;
+        username: string;
+        email: string;
+        role: string;
+      };
     }>
   > {
     return API.post('/auth/login', payload);

@@ -7,7 +7,10 @@ export default {
     secondary: '#07074E',
   },
   primary: {
-    DEFAULT: '#0062A5',
+    background: '#FBFAFF',
+    dark: '#EDECFE',
+    DEFAULT: '#5051F9',
+    10: '#E7E7FF',
     50: '#5EBDFF',
     100: '#49B5FF',
     200: '#20A5FF',
@@ -20,8 +23,12 @@ export default {
     900: '#000000',
     950: '#000000',
   },
+  blue: {
+    DEFAULT: '#1EA7FF',
+  },
   green: {
     DEFAULT: '#00ED9C',
+    background: '#299702',
     50: '#A6FFE0',
     100: '#91FFD9',
     200: '#68FFCC',

@@ -1,10 +1,16 @@
-import Dashboard from '@/components/dashboard/Dashboard';
 import Layout from '@/hoc/layouts/Layout';
-import { RouterContext } from '@/router';
 import { createFileRoute, redirect } from '@tanstack/react-router';
+import { RouterContext } from '@/router';
+import Settings from '@/components/settings/Settings';
 
-export const Route = createFileRoute('/')({
-  component: Index,
+export const Route = createFileRoute('/settings')({
+  component: () => {
+    return (
+      <Layout>
+        <Settings />
+      </Layout>
+    );
+  },
   beforeLoad: ({ context }: { context: RouterContext }) => {
     if (!context.accessToken) {
       throw redirect({
@@ -13,11 +19,3 @@ export const Route = createFileRoute('/')({
     }
   },
 });
-
-function Index() {
-  return (
-    <Layout>
-      <Dashboard />
-    </Layout>
-  );
-}

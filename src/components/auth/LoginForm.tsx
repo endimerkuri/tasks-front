@@ -11,6 +11,7 @@ import { addAuth, tokenSelector } from '../../redux/slices/auth';
 import { useDispatch, useSelector } from 'react-redux';
 import logo from '../../assets/svg/logo-dark.svg';
 import { Link, useNavigate } from '@tanstack/react-router';
+import { addMe } from '@/redux/slices/me';
 
 const LoginForm = () => {
   const [username, setUsername] = useState('');
@@ -53,8 +54,9 @@ const LoginForm = () => {
     AuthService.login(payload)
       .then((response) => {
         if (response.data.message) {
-          const { authentication } = response.data.data;
+          const { authentication, user } = response.data.data;
           dispatch(addAuth(authentication));
+          dispatch(addMe(user));
           showSuccess(response.data.message);
         }
       })
@@ -77,19 +79,19 @@ const LoginForm = () => {
   return (
     <>
       <div>
-        <div className="flex justify-around items-center mb-6">
-          <img src={logo} alt="Logo" className="w-64" />
+        <div className='flex justify-around items-center mb-6'>
+          <img src={logo} alt='Logo' className='w-64' />
         </div>
-        <h2 className="text-center text-2xl font-extrabold text-gray-900">
+        <h2 className='text-center text-2xl font-extrabold text-gray-900'>
           Sign in to your account
         </h2>
       </div>
-      <div className="rounded-md shadow-sm -space-y-px">
+      <div className='rounded-md shadow-sm -space-y-px'>
         <Input
-          id="username"
-          label="Username"
+          id='username'
+          label='Username'
           value={username}
-          placeholder="username"
+          placeholder='username'
           onKeyDown={onKeyDown}
           error={errors.username}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,13 +99,13 @@ const LoginForm = () => {
             setErrors({ ...errors, username: '' });
           }}
         />
-        <div className="relative">
-          <div className="w-full mt-2">
+        <div className='relative'>
+          <div className='w-full mt-2'>
             <PasswordInput
-              id="password"
-              name="password"
-              label="Password"
-              placeholder="password"
+              id='password'
+              name='password'
+              label='Password'
+              placeholder='password'
               value={password}
               onKeyDown={onKeyDown}
               error={errors.password}
@@ -116,11 +118,11 @@ const LoginForm = () => {
         </div>
       </div>
       <div>
-        <DefaultButton label="Log in" onClick={onClick} />
-        <div className="flex flex-row mt-4 text-sm items-center align-middle justify-center">
+        <DefaultButton label='Log in' onClick={onClick} />
+        <div className='flex flex-row mt-4 text-sm items-center align-middle justify-center'>
           <p> Don't have an account? </p>
-          <Link to="/signup">
-            <p className="hover:underline text-[#0062A5] ml-1 font-semibold hover:cursor-pointer hover:scale-[0.95] transition-transform duration-300 ease-in-out">
+          <Link to='/signup'>
+            <p className='hover:underline text-[#0062A5] ml-1 font-semibold hover:cursor-pointer hover:scale-[0.95] transition-transform duration-300 ease-in-out'>
               {'Sign Up!'}
             </p>
           </Link>

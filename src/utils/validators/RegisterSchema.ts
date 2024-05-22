@@ -7,8 +7,14 @@ export const RegisterFormSchema = z.object({
   password: z.string().nonempty({
     message: 'passwordCannotBeEmpty',
   }),
-  fullName: z.string().nonempty({
-    message: 'fullNameCannotBeEmpty',
+  firstName: z.string().nonempty({
+    message: 'firstNameCannotBeEmpty',
+  }),
+  lastName: z.string().nonempty({
+    message: 'lastNameCannotBeEmpty',
+  }),
+  email: z.string().nonempty({
+    message: 'emailCannotBeEmpty',
   }),
 });
 

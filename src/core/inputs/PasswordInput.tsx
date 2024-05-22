@@ -30,8 +30,8 @@ const PasswordInput = ({
 
   return (
     <div className={containerClass}>
-      <div className="focus-within:text-primary-500">
-        <div className="relative">
+      <div className='focus-within:text-primary-500'>
+        <div className='relative'>
           <input
             value={value}
             placeholder={placeholder}
@@ -52,12 +52,12 @@ const PasswordInput = ({
           </label>
           <div
             onClick={toggleVisibility}
-            className="absolute top-0 h-full right-4 flex justify-center items-center cursor-pointer"
+            className='absolute top-0 h-full right-4 flex justify-center items-center cursor-pointer'
           >
             {show ? (
-              <PiEye className="w-6 h-6" />
+              <PiEye className='w-6 h-6' />
             ) : (
-              <PiEyeClosed className="w-6 h-6" />
+              <PiEyeClosed className='w-6 h-6' />
             )}
           </div>
         </div>

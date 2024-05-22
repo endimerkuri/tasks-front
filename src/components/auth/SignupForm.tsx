@@ -13,11 +13,15 @@ import { RegisterFormSchema } from '@/utils/validators/RegisterSchema';
 const SignupForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [fullName, setFullName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
   const [errors, setErrors] = useState({
     username: '',
     password: '',
-    fullName: '',
+    firstName: '',
+    lastName: '',
+    email: '',
   });
   const navigate = useNavigate();
 
@@ -25,7 +29,9 @@ const SignupForm = () => {
     const result = RegisterFormSchema.safeParse({
       username,
       password,
-      fullName,
+      firstName,
+      lastName,
+      email,
     });
 
     if (!result.success) {
@@ -36,19 +42,33 @@ const SignupForm = () => {
         password:
           result.error.errors.find((error) => error.path[0] === 'password')
             ?.message || '',
-        fullName:
-          result.error.errors.find((error) => error.path[0] === 'fullName')
+        firstName:
+          result.error.errors.find((error) => error.path[0] === 'firstName')
+            ?.message || '',
+        lastName:
+          result.error.errors.find((error) => error.path[0] === 'lastName')
+            ?.message || '',
+        email:
+          result.error.errors.find((error) => error.path[0] === 'email')
             ?.message || '',
       });
       showError('Please check form for errors');
       return;
     }
 
-    setErrors({ username: '', password: '', fullName });
+    setErrors({
+      username: '',
+      password: '',
+      firstName: '',
+      lastName: '',
+      email: '',
+    });
     const payload = {
-      username: username,
-      password: password,
-      fullName: fullName,
+      username,
+      password,
+      firstName,
+      lastName,
+      email,
     };
     AuthService.signup(payload)
       .then((response) => {
@@ -76,31 +96,43 @@ const SignupForm = () => {
   return (
     <>
       <div>
-        <div className="flex justify-around items-center mb-6">
-          <img src={logo} alt="Logo" className="w-64" />
+        <div className='flex justify-around items-center mb-6'>
+          <img src={logo} alt='Logo' className='w-64' />
         </div>
-        <h2 className="text-center text-2xl font-extrabold text-gray-900">
+        <h2 className='text-center text-2xl font-extrabold text-gray-900'>
           Sign in to your account
         </h2>
       </div>
-      <div className="rounded-md shadow-sm -space-y-px">
+      <div className='rounded-md shadow-sm -space-y-px'>
         <Input
-          id="fullName"
-          label="Full Name"
-          value={fullName}
-          placeholder="full name"
+          id='firstName'
+          label='First Name'
+          value={firstName}
+          placeholder='first name'
           onKeyDown={onKeyDown}
-          error={errors.username}
+          error={errors.firstName}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            setFullName(e.target.value);
+            setFirstName(e.target.value);
             setErrors({ ...errors, username: '' });
           }}
         />
         <Input
-          id="username"
-          label="Username"
+          id='lastName'
+          label='Last Name'
+          value={lastName}
+          placeholder='last name'
+          onKeyDown={onKeyDown}
+          error={errors.lastName}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setLastName(e.target.value);
+            setErrors({ ...errors, username: '' });
+          }}
+        />
+        <Input
+          id='username'
+          label='Username'
           value={username}
-          placeholder="username"
+          placeholder='username'
           onKeyDown={onKeyDown}
           error={errors.username}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,13 +140,25 @@ const SignupForm = () => {
             setErrors({ ...errors, username: '' });
           }}
         />
-        <div className="relative">
-          <div className="w-full mt-2">
+        <Input
+          id='email'
+          label='Email'
+          value={email}
+          placeholder='email'
+          onKeyDown={onKeyDown}
+          error={errors.email}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setEmail(e.target.value);
+            setErrors({ ...errors, username: '' });
+          }}
+        />
+        <div className='relative'>
+          <div className='w-full mt-2'>
             <PasswordInput
-              id="password"
-              name="password"
-              label="Password"
-              placeholder="password"
+              id='password'
+              name='password'
+              label='Password'
+              placeholder='password'
               value={password}
               onKeyDown={onKeyDown}
               error={errors.password}
@@ -127,11 +171,11 @@ const SignupForm = () => {
         </div>
       </div>
       <div>
-        <DefaultButton type="submit" label="Sign Up" onClick={onSubmit} />
-        <div className="flex flex-row mt-4 text-sm items-center align-middle justify-center">
+        <DefaultButton type='submit' label='Sign Up' onClick={onSubmit} />
+        <div className='flex flex-row mt-4 text-sm items-center align-middle justify-center'>
           <p> Already have an account? </p>
-          <Link to="/">
-            <p className="hover:underline text-[#0062A5] ml-1 font-semibold hover:cursor-pointer hover:scale-[0.95] transition-transform duration-300 ease-in-out">
+          <Link to='/'>
+            <p className='hover:underline text-[#0062A5] ml-1 font-semibold hover:cursor-pointer hover:scale-[0.95] transition-transform duration-300 ease-in-out'>
               {'Log In!'}
             </p>
           </Link>
