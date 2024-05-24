@@ -29,7 +29,6 @@ const EditTask = ({
 }: EditTaskProps) => {
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description);
-  const [due, setDue] = useState(task.due);
   const [selectedStatusId, setSelectedStatusId] = useState(task.status);
   const [pictureUrl, setPictureUrl] = useState(task.pictureUrl);
 
