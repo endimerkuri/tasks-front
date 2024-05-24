@@ -36,7 +36,7 @@ const UserDropdown = () => {
       <div ref={dropdownRef} className='inline-flex bg-white rounded-md'>
         <div
           onClick={toggle}
-          className={`p-2 text-2xl ${
+          className={`px-2 py-1.5 text-2xl ${
             isOpen ? 'text-primary-800' : 'text-gray-600'
           } hover:text-white hover:bg-primary bg-primary-10 rounded-full font-semibold uppercase cursor-pointer`}
         >
@@ -46,7 +46,7 @@ const UserDropdown = () => {
           <button
             onClick={toggleVisibility}
             type='button'
-            className='inline-flex items-center rounded-full justify-center h-full px-2 text-gray-600 hover:text-gray-700 hover:bg-gray-50'
+            className='inline-flex items-center rounded-full justify-center h-full px-2.5 text-gray-600 hover:text-gray-700 hover:bg-gray-200'
           >
             <FiChevronDown className='text-primary' size={24} />
           </button>

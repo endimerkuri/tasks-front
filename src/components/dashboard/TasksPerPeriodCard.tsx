@@ -2,6 +2,7 @@ import Card from '@/core/cards/Card';
 import { useState } from 'react';
 import DateFilter from './partials/DateFilter';
 import Chart from 'react-apexcharts';
+import { ApexOptions } from 'apexcharts';
 
 interface TasksPerPeriodCardProps {
   title: string;
@@ -13,6 +14,29 @@ const TasksPerPeriodCard = ({ title }: TasksPerPeriodCardProps) => {
   const onDateFilterSelection = (period: string) => {
     setDateFilter(period);
   };
+  const chartOptions: ApexOptions = {
+    fill: {
+      gradient: {
+        opacityFrom: 0.7,
+        opacityTo: 0,
+      },
+    },
+    stroke: {
+      curve: 'smooth',
+    },
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    markers: {
+      size: 6,
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    chart: {
+      toolbar: {
+        show: false,
+      },
+    },
+  };
   const state = {
     series: [
       {
@@ -20,29 +44,7 @@ const TasksPerPeriodCard = ({ title }: TasksPerPeriodCardProps) => {
         data: [10, 20, 15, 35, 30, 40, 33],
       },
     ],
-    options: {
-      fill: {
-        gradient: {
-          opacityFrom: 0.7,
-          opacityTo: 0,
-        },
-      },
-      stroke: {
-        curve: 'smooth',
-      },
-      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-      markers: {
-        size: 6,
-      },
-      dataLabels: {
-        enabled: false,
-      },
-      chart: {
-        toolbar: {
-          show: false,
-        },
-      },
-    },
+    options: chartOptions,
   };
 
   return (

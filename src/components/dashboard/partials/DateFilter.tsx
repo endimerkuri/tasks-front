@@ -21,7 +21,7 @@ const TabRadioButtons = ({
 
   return (
     <div
-      className={`flex flex-col lg:flex-row gap-x-1 items-center px-1 ${textSize} h-full lg:h-9`}
+      className={`flex flex-col lg:flex-row gap-x-6 items-center px-1 ${textSize} h-full lg:h-9`}
     >
       {options.map((option) => (
         <span
@@ -51,8 +51,7 @@ const DateFilter = ({
     <TabRadioButtons
       options={dateShortcutOptions}
       selectedOptionState={[selectedDateFilter, handleFilterChange]}
-      className='w-full'
-      textSize='text-3xl'
+      textSize='text-2xl'
     />
   );
 };

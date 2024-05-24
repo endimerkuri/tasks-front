@@ -54,11 +54,11 @@ const LoginForm = () => {
     AuthService.login(payload)
       .then((response) => {
         if (response.data.message) {
-          const { authentication, user } = response.data.data;
-          dispatch(addAuth(authentication));
-          dispatch(addMe(user));
           showSuccess(response.data.message);
         }
+        const { authentication, user } = response.data.data;
+        dispatch(addAuth(authentication));
+        dispatch(addMe(user));
       })
       .catch((err) => {
         if (axios.isAxiosError<ApiError>(err)) {

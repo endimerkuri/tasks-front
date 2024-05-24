@@ -47,47 +47,57 @@ API.interceptors.request.use(
 
 API.interceptors.response.use(
   (res: AxiosResponse) => res,
-  async (error: AxiosError) => {
-    if (error.response?.status === 401) {
-      const originalRequest = error.config as AxiosRequestConfig;
-      if (!isRefreshing) {
-        isRefreshing = true;
-
-        const state = store.getState();
-        const refreshToken = _.get(state, 'auth.refreshToken', null);
-        try {
-          const response = await API.post<{
-            data: {
-              authentication: { accessToken: string; refreshToken: string };
-            };
-          }>('/auth/refresh', {
-            refreshToken,
-          });
-          const { authentication } = response.data.data;
-          dispatch(addAuth(authentication));
-          failedRequests.forEach((prom) => prom());
-          failedRequests = [];
-          originalRequest.headers!.Authorization = `Bearer ${authentication.accessToken}`;
-          return axios(originalRequest);
-        } catch (err) {
-          dispatch(removeMe({}));
-          dispatch(removeAuth({}));
-          window.location.reload();
-          throw err;
-        } finally {
-          isRefreshing = false;
-        }
-      } else {
-        return new Promise<AxiosResponse>((resolve) => {
-          failedRequests.push(() => {
-            originalRequest.headers!.Authorization = getAuth() || '';
-            resolve(axios(originalRequest));
-          });
-        });
-      }
-    } else {
-      throw error;
+  (error: AxiosError) => {
+    if (error.response?.status !== 401) {
+      return Promise.reject(error);
     }
+
+    const originalRequest = error.config as AxiosRequestConfig;
+    if (isRefreshing) {
+      failedRequests.push(() => {
+        originalRequest.headers!.Authorization = getAuth() || '';
+        axios(originalRequest);
+      });
+      return Promise.reject(error);
+    }
+
+    isRefreshing = true;
+    const state = store.getState();
+    const refreshToken = _.get(state, 'auth.refreshToken', null);
+
+    if (!refreshToken) {
+      dispatch(removeMe({}));
+      dispatch(removeAuth({}));
+      return Promise.reject(error);
+    }
+
+    API.post<{
+      data: {
+        authentication: { accessToken: string; refreshToken: string };
+      };
+    }>('/auth/refresh', {
+      refreshToken,
+    })
+      .then((response) => {
+        const { authentication } = response.data.data;
+        dispatch(addAuth(authentication));
+        failedRequests.push(() => {
+          originalRequest.headers!.Authorization = `Bearer ${authentication.accessToken}`;
+          axios(originalRequest);
+        });
+        failedRequests.forEach((prom) => prom());
+        failedRequests = [];
+      })
+      .catch((_err) => {
+        dispatch(removeMe({}));
+        dispatch(removeAuth({}));
+        window.location.reload();
+      })
+      .finally(() => {
+        isRefreshing = false;
+      });
+
+    return Promise.reject(error);
   },
 );
 

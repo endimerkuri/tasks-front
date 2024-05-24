@@ -1,5 +1,5 @@
-/** @type {import('tailwindcss').Config} */
-const themeColors = require('./src/assets/colors/themeColors');
+import type { Config } from 'tailwindcss';
+import themeColors from './src/assets/colors/themeColors';
 
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
@@ -15,4 +15,4 @@ export default {
     },
   },
   plugins: [],
-};
+} satisfies Config;

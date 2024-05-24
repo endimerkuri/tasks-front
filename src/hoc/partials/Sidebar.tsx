@@ -11,8 +11,8 @@ const Sidebar = () => {
     <div className='flex-1 overflow-auto flex flex-col items-center scrollbar-thin lg:mt-56 scrollbar-thumb-gray-300 scrollbar-thumb-rounded-full'>
       <ul className='flex flex-col space-y-1 gap-y-7'>
         <SidebarItem icon={<HiOutlineViewGrid />} link='/' exact />
-        <SidebarItem icon={<RiTimelineView />} link='/login' />
-        <SidebarItem icon={<BiBookOpen />} link='/signup' />
+        <SidebarItem icon={<RiTimelineView />} link='/timeline' />
+        <SidebarItem icon={<BiBookOpen />} link='/tasks' />
         <SidebarItem icon={<HiOutlineCog6Tooth />} link='/settings' />
       </ul>
     </div>

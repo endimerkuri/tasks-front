@@ -1,4 +1,5 @@
 import background from '@/assets/images/profileBackground.jpeg';
+import DefaultButton from '@/core/buttons/electrons/DefaultButton';
 import SimpleInput from '@/core/inputs/SimpleInput';
 import { addMe, initials, userData } from '@/redux/slices/me';
 import UserService from '@/services/user';
@@ -7,10 +8,10 @@ import { ApiError } from '@/utils/plugins/types/ApiResponse';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { FiMail } from 'react-icons/fi';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Settings = () => {
-  const buttonClassName = `group flex flex-row items-center align-middle relative justify-center border font-medium rounded-xl py-3 px-4 focus:outline-none hover:scale-110 transition duration-300`;
+  const buttonClassName = `group flex flex-row items-center align-middle relative justify-center border font-medium rounded-xl py-3 px-4 focus:outline-none enabled:hover:scale-110 transition duration-300 disabled:bg-slate-300 disabled:text-gray-500`;
 
   const userInitials = useSelector(initials);
   const user = useSelector(userData);
@@ -18,18 +19,13 @@ const Settings = () => {
   const [lastName, setLastName] = useState(user.lastName);
   const [email, setEmail] = useState(user.email);
   const [role, setRole] = useState(user.role);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     UserService.getUserMe()
       .then((response) => {
-        if (response.data.message) {
-          const { user } = response.data.data;
-          addMe(user);
-          setFirstName(user.firstName);
-          setLastName(user.lastName);
-          setEmail(user.email);
-          setRole(user.role);
-        }
+        const { user } = response.data.data;
+        dispatch(addMe(user));
       })
       .catch((err) => {
         if (axios.isAxiosError<ApiError>(err)) {
@@ -39,7 +35,7 @@ const Settings = () => {
           }
         }
       });
-  },[]);
+  }, []);
 
   const resetUserData = () => {
     setFirstName(user.firstName);
@@ -48,7 +44,20 @@ const Settings = () => {
     setRole(user.role);
   };
 
+  const getDataChanged = () => {
+    return (
+      firstName !== user.firstName ||
+      lastName !== user.lastName ||
+      email !== user.email ||
+      role !== user.role
+    );
+  };
+
   const saveUserData = () => {
+    const dataChanged = getDataChanged();
+    if (!dataChanged) {
+      return;
+    }
     UserService.updateUserMe({
       firstName,
       lastName,
@@ -58,13 +67,9 @@ const Settings = () => {
       .then((response) => {
         if (response.data.message) {
           showSuccess(response.data.message);
-          const { user: updatedUser } = response.data.data;
-          addMe(updatedUser);
-          setFirstName(updatedUser.firstName);
-          setLastName(updatedUser.lastName);
-          setEmail(updatedUser.email);
-          setRole(updatedUser.role);
         }
+        const { user: updatedUser } = response.data.data;
+        dispatch(addMe(updatedUser));
       })
       .catch((err: ApiError) => {
         if (axios.isAxiosError<ApiError>(err)) {
@@ -73,7 +78,7 @@ const Settings = () => {
             return showError(message);
           }
         }
-      })
+      });
   };
 
   return (
@@ -98,15 +103,18 @@ const Settings = () => {
               <div className='text-5xl font-semibold mt-10'>Settings</div>
             </div>
             <div className='flex flex-row mt-10 gap-x-4 items-start text-xl'>
-              <button className={`${buttonClassName}`} onClick={resetUserData}>
-                Cancel
-              </button>
-              <button
+              <DefaultButton
+                className={`${buttonClassName}`}
+                disabled={!getDataChanged()}
+                onClick={resetUserData}
+                label='Cancel'
+              />
+              <DefaultButton
+                disabled={!getDataChanged()}
                 className={`${buttonClassName} text-white bg-primary`}
                 onClick={saveUserData}
-              >
-                Save
-              </button>
+                label='Save'
+              />
             </div>
           </div>
           <div className='mt-10'>

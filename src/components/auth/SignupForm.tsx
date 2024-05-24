@@ -74,8 +74,8 @@ const SignupForm = () => {
       .then((response) => {
         if (response.data.message) {
           showSuccess(response.data.message);
-          navigate({ to: '/' });
         }
+        navigate({ to: '/' });
       })
       .catch((err) => {
         if (axios.isAxiosError<ApiError>(err)) {

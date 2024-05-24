@@ -13,6 +13,7 @@ export interface DefaultButtonProps
   width?: string;
   border?: string;
   icon?: JSX.Element;
+  rounded?: string;
 }
 
 const DefaultButton = ({
@@ -26,6 +27,7 @@ const DefaultButton = ({
   width = 'flex w-full',
   border = 'border-transparent',
   icon,
+  rounded = 'rounded-full',
   ...props
 }: DefaultButtonProps) => {
   let sizingClasses = 'py-4 px-6 text-sm';
@@ -38,7 +40,7 @@ const DefaultButton = ({
     sizingClasses = 'py-3 px-4 text-sm';
   }
 
-  const className = `group flex flex-row items-center align-middle relative ${width} justify-center border ${border} font-medium rounded-full 
+  const className = `group flex flex-row items-center align-middle relative ${width} justify-center border ${border} font-medium ${rounded}
   ${disabled ? 'text-gray-600' : textColor || 'text-white'} ${sizingClasses} 
   ${disabled ? 'bg-gray-200' : bgColor || 'bg-primary'}  ${
     disabled ? '' : bgColorHover || 'hover:bg-primary-600'

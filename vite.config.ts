@@ -1,15 +1,10 @@
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { TanStackRouterVite } from '@tanstack/router-vite-plugin';
 
 export default defineConfig(({ command, mode }) => {
-  const env = loadEnv(mode, process.cwd(), '');
-
   return {
-    server: {
-      port: env.VITE_PORT,
-    },
     resolve: {
       alias: {
         '@/': path.resolve(__dirname, './src'),
@@ -20,6 +15,7 @@ export default defineConfig(({ command, mode }) => {
         '@/hoc': path.resolve(__dirname, './src/hoc'),
         '@/hooks': path.resolve(__dirname, './src/hooks'),
         '@/redux': path.resolve(__dirname, './src/redux'),
+        '@/router': path.resolve(__dirname, './src/router'),
         '@/services': path.resolve(__dirname, './src/services'),
         '@/utils': path.resolve(__dirname, './src/utils'),
       },

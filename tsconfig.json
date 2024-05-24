@@ -31,7 +31,6 @@
       "@/core/*": ["src/core/*"],
       "@/hoc/*": ["src/hoc/*"],
       "@/hooks/*": ["src/hooks/*"],
-      "@/i18n/*": ["src/i18n/*"],
       "@/redux/*": ["src/redux/*"],
       "@/router/*": ["src/router/*"],
       "@/services/*": ["src/services/*"],

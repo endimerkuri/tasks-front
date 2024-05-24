@@ -1,4 +1,5 @@
 import Card from '@/core/cards/Card';
+import { ApexOptions } from 'apexcharts';
 import Chart from 'react-apexcharts';
 
 interface ProgressCardProps {
@@ -16,6 +17,49 @@ const ProgressCard = ({
   color,
   more,
 }: ProgressCardProps) => {
+  const chartOptions: ApexOptions = {
+    xaxis: {
+      labels: {
+        show: false,
+      },
+      axisBorder: {
+        show: false,
+      },
+      axisTicks: {
+        show: false,
+      },
+    },
+    yaxis: {
+      labels: {
+        show: false,
+      },
+    },
+    grid: {
+      yaxis: {
+        lines: {
+          show: false,
+        },
+      },
+    },
+    stroke: {
+      curve: 'smooth',
+    },
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    colors: [color],
+    chart: {
+      toolbar: {
+        show: false,
+      },
+      dropShadow: {
+        enabled: true,
+        top: 5,
+        left: 0,
+        blur: 7,
+        opacity: 0.4,
+        color,
+      },
+    },
+  };
   const state = {
     series: [
       {
@@ -23,49 +67,7 @@ const ProgressCard = ({
         data: [10, 20, 15, 35, 30, 40, 33],
       },
     ],
-    options: {
-      xaxis: {
-        labels: {
-          show: false,
-        },
-        axisBorder: {
-          show: false,
-        },
-        axisTicks: {
-          show: false,
-        },
-      },
-      yaxis: {
-        labels: {
-          show: false,
-        },
-      },
-      grid: {
-        yaxis: {
-          lines: {
-            show: false,
-          },
-        },
-      },
-      stroke: {
-        curve: 'smooth',
-      },
-      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-      colors: [color],
-      chart: {
-        toolbar: {
-          show: false,
-        },
-        dropShadow: {
-          enabled: true,
-          top: 5,
-          left: 0,
-          blur: 7,
-          opacity: 0.4,
-          color,
-        },
-      },
-    },
+    options: chartOptions,
   };
 
   return (
