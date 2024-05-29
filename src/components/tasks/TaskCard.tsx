@@ -20,7 +20,7 @@ const TaskCard = ({ i, task, statuses, onUpdate, status }: TaskCardProps) => {
 
   return (
     <Draggable key={task._id} draggableId={task._id} index={i}>
-      {(dragProvided, dragSnapshot) => (
+      {(dragProvided, _dragSnapshot) => (
         <div
           key={task._id}
           ref={dragProvided.innerRef}

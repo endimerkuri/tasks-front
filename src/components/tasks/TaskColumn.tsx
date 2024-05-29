@@ -76,7 +76,7 @@ const TaskColumn = ({
         isDropDisabled={false}
         isCombineEnabled={false}
       >
-        {(dropProvided, dropSnapshot) => (
+        {(dropProvided, _dropSnapshot) => (
           <div
             key={_id}
             ref={dropProvided.innerRef}

@@ -11,14 +11,13 @@ import { createPortal } from 'react-dom';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { labels } from '@/constants/labels';
+import { Label, labels } from '@/constants/labels';
 
 interface CreateTaskProps {
   isCreateTaskModelOpen: boolean;
   setIsCreateTaskModelOpen: (isOpen: boolean) => void;
   status: string;
   statusId: string;
-  due: Date;
   statuses: Status[];
   onUpdate: () => void;
 }
@@ -35,7 +34,7 @@ const CreateTask = ({
   const [description, setDescription] = useState('');
   const [pictureUrl, setPictureUrl] = useState('');
   const [selectedStatusId, setSelectedStatusId] = useState(statusId);
-  const [label, setLabel] = useState();
+  const [label, setLabel] = useState<Label | null>(null);
   const [due, setDue] = useState(new Date());
 
   const createTask = () => {
@@ -45,7 +44,7 @@ const CreateTask = ({
       due,
       statusId: selectedStatusId,
       pictureUrl,
-      label: label.label,
+      label: label?.label,
       labelColor: label?.labelColor || labels[0].labelColor,
     })
       .then((response) => {
@@ -83,7 +82,7 @@ const CreateTask = ({
     setTitle('');
     setDescription('');
     setPictureUrl('');
-    setLabel({ label: '', labelColor: '#5051F9' });
+    setLabel(null);
     setDue(new Date());
   };
 
