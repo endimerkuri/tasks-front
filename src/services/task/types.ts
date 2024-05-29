@@ -1,9 +1,11 @@
 export interface CreateTaskPayload {
   title: string;
   description: string;
-  due: string;
+  due: Date | null;
   statusId: string;
   pictureUrl?: string | null;
+  label?: string | null;
+  labelColor?: string | null;
 }
 
 export interface Status {

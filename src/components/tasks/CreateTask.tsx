@@ -9,12 +9,16 @@ import axios from 'axios';
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import Select from 'react-select';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { labels } from '@/constants/labels';
 
 interface CreateTaskProps {
   isCreateTaskModelOpen: boolean;
   setIsCreateTaskModelOpen: (isOpen: boolean) => void;
   status: string;
   statusId: string;
+  due: Date;
   statuses: Status[];
   onUpdate: () => void;
 }
@@ -31,20 +35,29 @@ const CreateTask = ({
   const [description, setDescription] = useState('');
   const [pictureUrl, setPictureUrl] = useState('');
   const [selectedStatusId, setSelectedStatusId] = useState(statusId);
+  const [label, setLabel] = useState();
+  const [due, setDue] = useState(new Date());
 
   const createTask = () => {
     TaskService.create({
       title,
       description,
-      due: 'Aug 20, 2021',
+      due,
       statusId: selectedStatusId,
       pictureUrl,
+      label: label.label,
+      labelColor: label?.labelColor || labels[0].labelColor,
     })
       .then((response) => {
         if (response.data.message) {
           showSuccess(response.data.message);
         }
         setIsCreateTaskModelOpen(false);
+        setTitle('');
+        setDescription('');
+        setPictureUrl('');
+        setLabel({ label: '', labelColor: '#5051F9' });
+        setDue(new Date());
         onUpdate();
       })
       .catch((err: ApiError) => {
@@ -65,6 +78,14 @@ const CreateTask = ({
     value: statusId,
     label: status,
   };
+  const onClose = () => {
+    setIsCreateTaskModelOpen(false);
+    setTitle('');
+    setDescription('');
+    setPictureUrl('');
+    setLabel({ label: '', labelColor: '#5051F9' });
+    setDue(new Date());
+  };
 
   return (
     <div>
@@ -72,7 +93,7 @@ const CreateTask = ({
         <CreateModal
           title={`Create Task`}
           isOpen={isCreateTaskModelOpen}
-          onClose={() => setIsCreateTaskModelOpen(false)}
+          onClose={onClose}
           otherButtons={[
             <DefaultButton
               rounded='rounded-xl'
@@ -117,6 +138,38 @@ const CreateTask = ({
                 setPictureUrl(e.target.value)
               }
             />
+            <div className='flex flex-row justify-left gap-x-4 items-center'>
+              <div>
+                <label
+                  className={`text-md text-gray-800 duration-300 top-1.5 left-2 px-1 peer-focus:text-blue-600`}
+                  htmlFor='label'
+                >
+                  Status
+                </label>
+                <Select
+                  id='label'
+                  name='Label'
+                  defaultValue={{label: '', labelColor: '#5051F9'}}
+                  options={labels}
+                  className='rounded-xl'
+                  menuPosition='fixed'
+                  onChange={(value: any) => {setLabel(value)}}
+                />
+              </div>
+              <DatePicker
+                id='due'
+                customInput={
+                  <SimpleInput
+                    id='due'
+                    label='Due'
+                    className='cursor-pointer'
+                    value={due.toString()}
+                  />
+                }
+                selected={due}
+                onChange={(date: Date) => setDue(date)}
+              />
+            </div>
             <div>
               <label
                 className={`text-md text-gray-800 duration-300 top-1.5 left-2 px-1 peer-focus:text-blue-600`}
