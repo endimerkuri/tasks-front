@@ -11,7 +11,7 @@ import { createPortal } from 'react-dom';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { labels } from '@/constants/labels';
+import { labelOptions, labels } from '@/constants/labels';
 
 interface CreateTaskProps {
   isCreateTaskModelOpen: boolean;
@@ -34,19 +34,19 @@ const CreateTask = ({
   const [description, setDescription] = useState('');
   const [pictureUrl, setPictureUrl] = useState('');
   const [selectedStatusId, setSelectedStatusId] = useState(statusId);
-  const [labelIdx, setLabelIdx] = useState<number | null>(null);
+  const [labelOption, setLabelOption] = useState<number>(0);
   const [due, setDue] = useState(new Date());
 
   const createTask = () => {
-    const label = labelIdx ? labels[labelIdx] : null;
+    const selectedLabel = labels[labelOption];
     TaskService.create({
       title,
       description,
       due,
       statusId: selectedStatusId,
       pictureUrl,
-      label: label?.label,
-      labelColor: label?.labelColor || labels[0].labelColor,
+      label: selectedLabel?.label,
+      labelColor: selectedLabel?.labelColor || '',
     })
       .then((response) => {
         if (response.data.message) {
@@ -56,7 +56,7 @@ const CreateTask = ({
         setTitle('');
         setDescription('');
         setPictureUrl('');
-        setLabelIdx(null);
+        setLabelOption(0);
         setDue(new Date());
         onUpdate();
       })
@@ -83,7 +83,7 @@ const CreateTask = ({
     setTitle('');
     setDescription('');
     setPictureUrl('');
-    setLabelIdx(null);
+    setLabelOption(0);
     setDue(new Date());
   };
 
@@ -151,11 +151,11 @@ const CreateTask = ({
                 <Select
                   id='label'
                   name='Label'
-                  defaultValue={{ value: { label: '', labelColor: '' }, label: 'None' }}
-                  options={labels.map((label, idx) => ({ value: idx, label: label.label }))}
+                  defaultValue={labelOptions[0]}
+                  options={labelOptions}
                   className='rounded-xl'
                   menuPosition='fixed'
-                  onChange={(value: any) => {setLabelIdx(value)}}
+                  onChange={(value: any) => {setLabelOption(value.value)}}
                 />
               </div>
               <DatePicker

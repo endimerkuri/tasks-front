@@ -3,7 +3,34 @@ export interface Label {
   labelColor: string;
 }
 
+export const labelOptions = [
+  {
+    value: 0,
+    label: 'None',
+  },
+  {
+    value: 1,
+    label: 'Design',
+  },
+  {
+    value: 2,
+    label: 'Research',
+  },
+  {
+    value: 3,
+    label: 'Planning',
+  },
+  {
+    value: 4,
+    label: 'Content',
+  }
+];
+
 export const labels = [
+  {
+    label: '',
+    labelColor: '',
+  },
   {
     label: 'Design',
     labelColor: '#5051F9',

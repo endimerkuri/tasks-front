@@ -1,18 +1,17 @@
 import DefaultButton from '@/core/buttons/electrons/DefaultButton';
 import SimpleInput from '@/core/inputs/SimpleInput';
 import EditModal from '@/core/modal/atoms/EditModal';
-import useClickOutside from '@/hooks/useClickOutside';
 import TaskService from '@/services/task';
 import { Status, Task } from '@/services/task/types';
 import { showError, showSuccess } from '@/utils/helpers';
 import { ApiError } from '@/utils/plugins/types/ApiResponse';
 import axios from 'axios';
-import { useCallback, useRef, useState } from 'react';
-import { HexColorPicker } from 'react-colorful';
+import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { labelOptions, labels } from '@/constants/labels';
 
 interface EditTaskProps {
   showModal: boolean;
@@ -35,13 +34,9 @@ const EditTask = ({
   const [description, setDescription] = useState(task.description);
   const [selectedStatusId, setSelectedStatusId] = useState(task.status);
   const [pictureUrl, setPictureUrl] = useState(task.pictureUrl);
-  const [label, setLabel] = useState(task.label);
-  const [labelColor, setLabelColor] = useState(task.labelColor || '#5051F9');
-  const [isPickerOpen, setIsPickerOpen] = useState(false);
+  const initialLabelOption = labels.findIndex((label) => label.label === task.label);
+  const [labelOption, setLabelOption] = useState<number>(initialLabelOption !== -1 ? initialLabelOption : 0);
   const [due, setDue] = useState(new Date());
-  const popover = useRef(null);
-  const close = useCallback(() => setIsPickerOpen(false), []);
-  useClickOutside(popover, close);
 
   const statusValue = statuses.map((status) => ({
     value: status._id,
@@ -53,14 +48,15 @@ const EditTask = ({
   };
 
   const editTask = () => {
+    const selectedLabel = labels[labelOption];
     TaskService.edit(
       {
         title,
         description,
         statusId: selectedStatusId,
         pictureUrl,
-        label,
-        labelColor,
+        label: selectedLabel.label,
+        labelColor: selectedLabel.labelColor,
       },
       task._id,
     )
@@ -160,40 +156,24 @@ const EditTask = ({
               }
             />
             <div className='flex flex-row justify-left gap-x-4 items-center'>
-              <SimpleInput
-                id='label'
-                label='Label'
-                value={label}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setLabel(e.target.value)
-                }
-              />
-              <div className='relative'>
+              <div>
+                <div className='mb-2.5 w-32'>
                 <label
-                  htmlFor='labelColor'
                   className={`text-md text-gray-800 duration-300 top-1.5 left-2 px-1 peer-focus:text-blue-600`}
+                  htmlFor='label'
                 >
-                  Label Color
+                  Label
                 </label>
-                <div
-                  className='w-10 h-10 mt-2 rounded-lg cursor-pointer'
-                  id='labelColor'
-                  style={{
-                    backgroundColor: labelColor,
-                  }}
-                  onClick={() => setIsPickerOpen(true)}
+                </div>
+                <Select
+                  id='label'
+                  name='Label'
+                  defaultValue={labelOptions[initialLabelOption]}
+                  options={labelOptions}
+                  className='rounded-xl'
+                  menuPosition='fixed'
+                  onChange={(value: any) => {setLabelOption(value.value)}}
                 />
-                {isPickerOpen && (
-                  <div
-                    className='absolute z-50 bottom-10 right-12'
-                    ref={popover}
-                  >
-                    <HexColorPicker
-                      color={labelColor}
-                      onChange={(color) => setLabelColor(color)}
-                    />
-                  </div>
-                )}
               </div>
               <DatePicker
                 id='due'
