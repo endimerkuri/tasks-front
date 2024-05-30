@@ -11,7 +11,7 @@ import { createPortal } from 'react-dom';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { Label, labels } from '@/constants/labels';
+import { labels } from '@/constants/labels';
 
 interface CreateTaskProps {
   isCreateTaskModelOpen: boolean;
@@ -34,10 +34,11 @@ const CreateTask = ({
   const [description, setDescription] = useState('');
   const [pictureUrl, setPictureUrl] = useState('');
   const [selectedStatusId, setSelectedStatusId] = useState(statusId);
-  const [label, setLabel] = useState<Label | null>(null);
+  const [labelIdx, setLabelIdx] = useState<number | null>(null);
   const [due, setDue] = useState(new Date());
 
   const createTask = () => {
+    const label = labelIdx ? labels[labelIdx] : null;
     TaskService.create({
       title,
       description,
@@ -55,7 +56,7 @@ const CreateTask = ({
         setTitle('');
         setDescription('');
         setPictureUrl('');
-        setLabel({ label: '', labelColor: '#5051F9' });
+        setLabelIdx(null);
         setDue(new Date());
         onUpdate();
       })
@@ -82,7 +83,7 @@ const CreateTask = ({
     setTitle('');
     setDescription('');
     setPictureUrl('');
-    setLabel(null);
+    setLabelIdx(null);
     setDue(new Date());
   };
 
@@ -139,20 +140,22 @@ const CreateTask = ({
             />
             <div className='flex flex-row justify-left gap-x-4 items-center'>
               <div>
+                <div className='mb-2.5 w-32'>
                 <label
                   className={`text-md text-gray-800 duration-300 top-1.5 left-2 px-1 peer-focus:text-blue-600`}
                   htmlFor='label'
                 >
-                  Status
+                  Label
                 </label>
+                </div>
                 <Select
                   id='label'
                   name='Label'
-                  defaultValue={{label: '', labelColor: '#5051F9'}}
-                  options={labels}
+                  defaultValue={{ value: { label: '', labelColor: '' }, label: 'None' }}
+                  options={labels.map((label, idx) => ({ value: idx, label: label.label }))}
                   className='rounded-xl'
                   menuPosition='fixed'
-                  onChange={(value: any) => {setLabel(value)}}
+                  onChange={(value: any) => {setLabelIdx(value)}}
                 />
               </div>
               <DatePicker
